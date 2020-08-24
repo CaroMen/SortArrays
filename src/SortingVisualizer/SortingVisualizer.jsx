@@ -24,10 +24,33 @@ export default class SortingVisualizer extends React.Component {
     }
 
     mergeSort() {
-        const javaScriptSortedArray = this.state.array.slice().sort((a, b) => a - b);
-        const sortedArray = sortingAlgorithms.mergeSort(this.state.array);
-
-        console.log(arraysAreEqual(javaScriptSortedArray, sortedArray));
+        const animations = sortingAlgorithms.mergeSort(this.state.array);
+        const newAnimations = [];
+        for (const animation of animations) {
+            newAnimations.push(animation.comparison);
+            newAnimations.push(animation.comparison);
+            newAnimations.push(animation.swap);
+        }
+        for (let i = 0; i < newAnimations.length; i++) {
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = i % 3 !== 2;
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = newAnimations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? 'pink' : 'mediumslateblue';
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * 3);
+            } else {
+                setTimeout(() => {
+                    const [barOneIdx, newHeight] = newAnimations[i];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    barOneStyle.height = `${newHeight}px`;
+                }, i * 3);
+            }
+        }
     }
 
     quickSort() { }
